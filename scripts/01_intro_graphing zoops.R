@@ -32,7 +32,26 @@ library(skimr)
 z.df <- read_csv("data/zoops_long.csv") %>% clean_names() %>% 
   mutate(date = as_date(date)) 
 
+# Simple zoop graph with no modification
+z.df %>% filter(year==1985) %>% 
+  ggplot(aes(date, number, color=species)) +
+  geom_point() +
+  geom_line() 
+
+
+
+# ggThemeAssist - how to modify theme settings ------
+# what if we wanted a differnet look to the graph before we go further
+# highlight code from above and click addins and ggthemeassistant
+z.df %>% filter(year==1985) %>% 
+  ggplot(aes(date, number, color=species)) +
+  geom_point() +
+  geom_line() 
+
+
+
 # Save your own theme ------
+# you can name it as you want and copy your theme settings here
 theme_gleon <- function(base_size = 14, base_family = "Helvetica")
 {
   theme(
@@ -58,16 +77,15 @@ theme_gleon <- function(base_size = 14, base_family = "Helvetica")
     legend.background = element_rect(fill = NA)) 
 }
 
-
-# try out set theme -----
-zoop.plot <- z.df %>% filter(year==1985) %>% 
+# now to try your own them -----
+# copy grpah rom above with no theme settings and name the theme as you want
+z.df %>% filter(year==1985) %>% 
   ggplot(aes(date, number, color=species)) +
   geom_point() +
   geom_line() +
-  theme_gleon()
-zoop.plot
+  theme_light() # change light to your name
 
-# Now to facet grid
+# Now to facet grid ----
 zoop.plot <- z.df %>% filter(year==1989) %>% 
   ggplot(aes(date, number, color=species)) +
   geom_point() +
@@ -75,10 +93,24 @@ zoop.plot <- z.df %>% filter(year==1989) %>%
   theme_gleon() +
   facet_grid(site~.)
 zoop.plot
+
+
+
+# Now you can animate the grpah to look at specific data
 ggplotly(zoop.plot)
 
+# a lot of options but you can do 
+zoop.plot <- z.df %>% filter(year==1989) %>% 
+  ggplot(aes(date, number, color=species, text = paste('site:', site, sep=" "))) +
+  geom_point() +
+  geom_line() +
+  theme_gleon() +
+  facet_grid(site~.)
+ggplotly(zoop.plot)
 
-# separate graphs -----
+# Make separate graphs -----
+z.df %>% distinct(species)
+
 # N2 Fert 
 n2f.plot <- z.df %>% filter(year==1989) %>% 
   filter(site == "N2 Fert") %>% 
@@ -86,7 +118,13 @@ n2f.plot <- z.df %>% filter(year==1989) %>%
   geom_point() +
   geom_line() +
   labs(x="Date", y= "Count") +
-  theme_gleon() 
+  theme_gleon() +
+  scale_color_manual(
+    name="Zooplankton Species",
+    values = c("darkgreen", "blue2", "red4", "purple3", 
+                "orange3", "yellow4", "steelblue4", "goldenrod4"),
+    labels = c("bosmina", "c_scutt", "d_long", "d_midd", 
+               "d_prib", "heter", "holo", "p_ped")) 
 n2f.plot
 
 # N2 Ref 
@@ -96,6 +134,12 @@ n2r.plot <- z.df %>% filter(year==1989) %>%
   geom_point() +
   geom_line() +
   labs(x="Date", y= "Count") +
+  scale_color_manual(
+    name="Zooplankton Species",
+    values = c("darkgreen", "blue2", "red4", "purple3", 
+                          "orange3", "yellow4", "steelblue4", "goldenrod4"),
+                          labels = c("bosmina", "c_scutt", "d_long", "d_midd", 
+                                     "d_prib", "heter", "holo", "p_ped")) +
   theme_gleon() 
 n2r.plot
 
@@ -105,6 +149,12 @@ toolik.plot <- z.df %>% filter(year==1989) %>%
   geom_point() +
   geom_line() +
   labs(x="Date", y= "Count") +
+  scale_color_manual(
+    name="Zooplankton Species",
+    values = c("darkgreen", "blue2", "red4", "purple3", 
+                          "orange3", "yellow4", "steelblue4", "goldenrod4"),
+                          labels = c("bosmina", "c_scutt", "d_long", "d_midd", 
+                                     "d_prib", "heter", "holo", "p_ped")) +
   theme_gleon() 
 toolik.plot
 
@@ -126,3 +176,40 @@ ggsave(final.plot, file ="figures/final_zoop_plot.pdf",
        units = "in",
        width = 8, height = 8)
 
+# Usin Factors
+z.df <- z.df %>% 
+  mutate(species = as_factor(species),
+         site = as_factor(site))
+
+# see levels
+levels(z.df$species)
+
+# reorder factors
+z.df <- z.df %>% 
+  mutate(species = fct_relevel(species, 
+     "heter",   "holo",    "p_ped" , "bosmina", 
+      "c_scutt", "d_long",  "d_midd" ,  "d_prib"))
+
+reorder.plot <- z.df %>% filter(year==1989) %>% 
+  ggplot(aes(date, number, color=species, text = paste('site:', site, sep=" "))) +
+  geom_point() +
+  geom_line() +
+  theme_gleon() +
+  facet_grid(site~.)
+reorder.plot
+
+toolik_reorder.plot <- z.df %>% filter(year==1989) %>% 
+  filter(site == "Toolik") %>% 
+  ggplot(aes(date, number, color=species)) +
+  geom_point() +
+  geom_line() +
+  labs(x="Date", y= "Count") +
+  scale_color_manual(
+    name="Zooplankton Species",
+    values = c("darkgreen", "blue2", "red4", "purple3", 
+                          "orange3", "yellow4", "steelblue4", "goldenrod4"),
+                          labels = c("heter",   "holo",    "p_ped" , "bosmina", 
+                                     "c_scutt", "d_long",  "d_midd" ,  "d_prib")) +
+  theme_gleon() 
+toolik_reorder.plot
+         
