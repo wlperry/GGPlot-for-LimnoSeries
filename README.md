@@ -21,7 +21,7 @@ These packages are installed one time and run only once as they load a menu item
 
 # Working with themes
 
-This will be script 01_intro_script in the scripts folder. The goal of this is how to:
+This will be script 01_intro_graphing zoops.R in the scripts folder. The goal of this is how to:
 
 -   import a file and fix the headers
 -   make a simple graph
