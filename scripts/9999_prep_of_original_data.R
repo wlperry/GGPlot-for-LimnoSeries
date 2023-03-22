@@ -27,7 +27,7 @@ library(plotly)
 library(skimr)
 
 # read in the file -----
-t.df <- read_excel("data/toolik_n2_physchem_90s.xlsx", na = ".") %>% clean_names() %>% 
+t.df <- read_excel("data/backup/toolik_n2_physchem_90s.xlsx", na = ".") %>% clean_names() %>% 
   mutate(site = tolower(site)) %>% 
   mutate(year = year(date), month = month(date))
 
@@ -73,12 +73,13 @@ write_csv(toolik_long.df, file = "data/toolik_long.csv")
 
 
 # Zoop data
-z.df <- read_excel("data/toolok_n2_zoops_90s.xlsx" , na=".",
+z.df <- read_excel("data/backup/toolok_n2_zoops_90s.xlsx" , na=".",
                    sheet = "Data") %>% 
   clean_names() %>% 
   select(-d_pulex, -eurycercus) %>% 
   mutate(year= year(date)) %>% 
-  mutate(date=as_date(date))
+  mutate(date=as_date(date)) %>% 
+  filter(year ==1985)
 
 # z.df <- z.df  %>% 
 #   filter(site == "Toolik")
@@ -93,20 +94,6 @@ z_long.df <- z_long.df %>%
    group_by(site, depth_m, date, year, species ) %>% 
   summarize(number = mean(number, na.rm=TRUE))
 
-write_csv(z.df, file="data/zoops_wide.csv")
+write_csv(z.df, file="data/zoops_toolik_1985.csv")
 write_csv(z_long.df, file="data/zoops_long.csv")
   
-zoop.plot <- z_long.df %>% filter(year==1985) %>% 
-  ggplot(aes(date, number, color=species)) +
-  geom_point() +
-  geom_line()
-zoop.plot
-ggplotly(zoop.plot)
-
-zoop.plot <- z_long.df %>% filter(year==1985) %>% 
-  ggplot(aes(date, number, color=species)) +
-  geom_point() +
-  geom_line() +
-  facet_grid(.~site)
-zoop.plot
-ggplotly(zoop.plot)

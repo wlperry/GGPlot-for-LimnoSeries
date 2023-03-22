@@ -10,8 +10,6 @@
 # install.packages("ggThemeAssist")
 # install.packages("styler")
 
-
-
 # # Load libraries -----
 # Libraries loaded only one time ------
 # library(ggThemeAssist)
@@ -29,15 +27,19 @@ library(skimr)
 
 # # Data Munging -----
 # read in the file -----
+# this data is the average data from lake N2 from 1990 to 1999 in depths 0-2m
+# there is a referene and a treatment side of the lake after fertilizaiton was stopped
 n2.df <- read_csv("data/n2_summmary_0-2m.csv") %>% clean_names() %>% 
-  mutate(date = as_date(date))
+  mutate(date = as_date(date)) 
 
+# Challenge #1 how to get summary data for chlorophyll a ("chl_ug_l") 
+# grouped by treatment and year?
 # summary data -----
 n2.df %>% filter(variable == "chl_ug_l") %>% 
                  group_by(treatment, year) %>% skim(value)
 
 # # Plots sequence -----
-# plot of means over time ---
+# plot of data over time ----
 n2.df %>% filter(variable =="chl_ug_l") %>% 
   ggplot(aes(x=year, y=value,  color = treatment)) + 
   geom_point(position = position_jitterdodge(jitter.width = 0.2,  dodge.width=0.5))
@@ -217,7 +219,7 @@ n2.df %>% filter(variable =="secchi_m") %>%
     geom = "errorbar", linetype = "solid",
     width=0.4,
     position = position_dodge(width=0.5)) +
-  labs(x="year", y = expression(bold("Chlorpphyll a ug l"^-1))) +
+  labs(x="year", y = "Secchi Depth (m)") +
   scale_x_continuous(breaks = seq(1990, 1999, by=1)) +
   scale_color_manual(
     name="Treatment",
