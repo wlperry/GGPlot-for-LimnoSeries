@@ -262,7 +262,47 @@ levels(n2.df$treatment)
 
 # now to regraph --- 
 # note the scale_XXX_manual are now reversed
-n2.df %>% filter(variable =="chl_ug_l") %>% 
+n2_chla.plot <- n2.df %>% filter(variable =="chl_ug_l") %>% 
+  ggplot(aes(x=year, y=value,  color = treatment , linetype = treatment)) +   
+  stat_summary(
+    fun=mean, na.rm = TRUE,
+    geom = "point",
+    size=3,
+    position = position_dodge(width=0.5)) +
+  stat_summary(
+    fun=mean, na.rm = TRUE,
+    geom = "line", 
+    size=1,
+    position = position_dodge(width=0.5)) +
+  stat_summary(
+    fun.data = mean_se, na.rm = TRUE,
+    geom = "errorbar", linetype = "solid",
+    width=0.4,
+    position = position_dodge(width=0.5)) +
+  # labs(x="year", y = expression(bold("Chlorpphyll a ug l"^-1))) +
+  scale_color_manual(
+    name="Treatment",
+    values = c("blue2", "darkgreen"),
+    labels = c("Reference", "Treatment")) + 
+  scale_fill_manual(
+    name="Treatment",
+    values = c("blue2", "darkgreen"),
+    labels = c("Reference", "Treatment")) + 
+  scale_shape_manual(
+    name="Treatment",
+    values = c(22,21),
+    labels = c("Reference", "Treatment")) + 
+  scale_linetype_manual(
+    name="Treatment",
+    values = c("dotted", "solid"),
+    labels = c("Reference", "Treatment")) 
+n2_chla.plot
+
+ggplotly(n2_chla.plot)
+
+# using ggplotly. ---
+
+n2.plot <- n2.df %>% filter(variable =="chl_ug_l") %>% 
   ggplot(aes(x=year, y=value,  color = treatment , linetype = treatment)) +   
   stat_summary(
     fun=mean, na.rm = TRUE,
@@ -297,3 +337,6 @@ n2.df %>% filter(variable =="chl_ug_l") %>%
     values = c("dotted", "solid"),
     labels = c("Reference", "Treatment")) 
 
+n2.plot
+
+ggplotly(n2.plot)

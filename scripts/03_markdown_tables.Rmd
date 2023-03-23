@@ -1,0 +1,74 @@
+---
+title: "Zooplankton in lakes"
+output:
+  html_document:
+    df_print: paged
+  word_document: default
+  pdf_document: default
+---
+
+# Markdown!! a way to make live documents
+
+R Notebooks can be a way to do a lot of live documents includin presentaitions, word documents, pdf files, and even web pages.
+
+## Making tables
+
+Today we will use it to make some simple tables
+
+```{r libraries, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+# # Libraries used each time ---------
+# uesed each time
+library(tidyverse)
+library(scales)
+library(readxl)
+library(janitor)
+library(patchwork)
+library(plotly)
+library(skimr)
+library(kableExtra)
+```
+
+```{r read_file, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+## read in the file -----
+z.df <- read_csv("data/zoops_long.csv") %>% clean_names() %>% 
+  mutate(date = as_date(date))
+# head(z.df)
+```
+
+## Now to make a table of the data we have
+
+all from: <https://cran.r-project.org/web/packages/kableExtra/vignettes/awesome_table_in_html.html>
+
+```{r include=FALSE}
+z_summary.df <- z.df %>% 
+  mutate(month = month(date)) %>% 
+  group_by(site, year, month, species) %>% 
+  summarize(mean_count = mean(number, na.rm = TRUE))
+  
+```
+
+This is the long summary table
+
+```{r echo=FALSE}
+knitr::kable( z_summary.df) %>%  
+  kable_classic_2(full_width = FALSE, position = "left", html_font ="Cambria") %>%
+  kable_styling(bootstrap_options = c("striped"))
+```
+
+So that sort of sucks and not the best - how can we reformat
+
+```{r include=FALSE}
+z_summary_wide.df <- z_summary.df %>% 
+  pivot_wider(
+    names_from = species,
+    values_from = mean_count
+  )
+```
+
+So here is the wide table
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+knitr::kable( z_summary_wide.df) %>%
+  kable_classic_2(full_width = FALSE, position = "left", html_font ="Cambria") %>%
+  kable_styling(bootstrap_options = c("striped"))
+```
