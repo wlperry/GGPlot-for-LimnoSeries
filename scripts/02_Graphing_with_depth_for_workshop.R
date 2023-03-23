@@ -39,11 +39,12 @@ temp.df <- t.df %>%
 
 # plot of temp with depth
 # so lets make a plot of 1990-07-03 for toolik lake of temp vs depth 
-temp.df %>% 
-  filter(date == ymd("1990-07-03")) %>% 
-  ggplot(aes(x=depth_m, y=value)) + 
-  geom_point() + 
-  geom_line()
+
+
+
+
+
+
 
 # first way to do the depth versus temp plot-----
 # so this looks good - now how to get the temp on the top and depth vertical
@@ -55,8 +56,14 @@ temp.df %>%
   filter(date == ymd("1990-07-03")) %>% 
   ggplot(aes(y=value, x=depth_m)) + 
   geom_point() + 
-  geom_line() +
-  coord_flip() 
+  geom_line() 
+
+
+
+
+
+
+
 
 # Challenge #2 how do you revese the y axis? -----
 temp.df %>% 
@@ -64,8 +71,15 @@ temp.df %>%
   ggplot(aes(y=value, x=depth_m)) + 
   geom_point() + 
   geom_line() +
-  coord_flip() +
-  scale_y_reverse()
+  coord_flip() 
+
+
+
+
+
+
+
+
 
 # Challenge #3 how do you get the x axis on the top? ----
 temp.df %>% 
@@ -74,8 +88,9 @@ temp.df %>%
   geom_point() + 
   geom_line() +
   coord_flip() +
-  scale_x_reverse() +
-  scale_y_continuous(position = "right") 
+  scale_x_reverse() 
+
+
 
 
 # Challenge #4 Second way to do the variable with depth plot ----
@@ -87,10 +102,12 @@ temp.df %>%
 temp.df %>% 
   filter(date == ymd("1990-07-03")) %>% 
   ggplot(aes(x=value, y=depth_m)) + 
-  geom_point() + 
-  geom_path() +
-  scale_y_reverse() +
-  scale_x_continuous(position="top")
+  geom_point() 
+
+
+
+
+
 
 
 # Now doing mean and standard error with depths ------
@@ -121,7 +138,7 @@ temp_july.df %>%
   scale_x_continuous(position = "top")
 
 
-# Followup if you likd Coord_flip----
+# Followup if you like Coord_flip----
 # Attempt to do without the table - note you need to use the coord_flip 
 # in my opinion it can lead to a lot of issues
 temp.df %>% 
