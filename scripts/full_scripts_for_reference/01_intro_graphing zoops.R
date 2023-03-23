@@ -28,7 +28,7 @@ library(skimr)
 # Data Munging ----- 
 ## read in the file -----
 z.df <- read_csv("data/zoops_toolik_1985.csv") %>% clean_names() %>% 
-  mutate(date = as_date(date))
+  mutate(date = mdy(date))
 
 # Summary stats by lake-----
 # what does the data look like? 

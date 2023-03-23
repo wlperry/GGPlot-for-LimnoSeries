@@ -41,7 +41,7 @@ temp.df <- t.df %>%
 # so lets make a plot of 1990-07-03 for toolik lake of temp vs depth 
 temp.df %>% 
   filter(date == ymd("1990-07-03")) %>% 
-  ggplot(aes(y=value, x=depth_m)) + 
+  ggplot(aes(x=depth_m, y=value)) + 
   geom_point() + 
   geom_line()
 

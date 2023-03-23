@@ -27,8 +27,12 @@ library(skimr)
 
 # Data Munging ----- 
 ## read in the file -----
-z.df <- read_csv("data/zoops_toolik_1985.csv") %>% clean_names() %>% 
-  mutate(date = as_date(date))
+z.df <- read_csv("data/zoops_toolik_1985.csv") 
+
+# Challenge # 1 - how you you clean up the column names ----
+
+
+
 
 # Summary stats by lake-----
 # what does the data look like? 
@@ -45,7 +49,7 @@ z.df <- read_csv("data/zoops_toolik_1985.csv") %>% clean_names() %>%
 
 
 
-# Challenge #1 --------
+# Challenge #2 --------
 # - how do you change the theme quickly with built in themes? Try it above?
 # The goal is to be able to do this with our own theme or set of themes
 
@@ -100,7 +104,7 @@ theme_gleon <- function(base_size = 14, base_family = "Helvetica")
 }
 
 
-# Challenge 2------
+# Challenge #3------
 # now can you use your own theme instead of the classic theme?
 
 # practice with your theme-------
