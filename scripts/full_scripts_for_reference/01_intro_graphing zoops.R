@@ -27,7 +27,7 @@ library(skimr)
 
 # Data Munging ----- 
 ## read in the file -----
-z.df <- read_csv("data/zoops_toolik_1985.csv") %>% clean_names() %>% 
+z.df <- read_csv("data/zoops_toolik_1985.csv")  %>% clean_names() %>% 
   mutate(date = mdy(date))
 
 # Summary stats by lake-----
@@ -141,13 +141,13 @@ saved_theme <- theme(
   legend.background = element_rect(fill = NA)) 
 
 ## save it as RDS
-saved_theme %>% saveRDS('saved_theme.rds')
+saved_theme %>% saveRDS('themes/saved_theme.rds')
 
 #delete the theme object
 rm(saved_theme)
 
 ## read theme from file
-theme_gleon2 <- readRDS('saved_theme.rds')
+theme_gleon2 <- readRDS('themes/saved_theme.rds')
 
 # Try the second way to do themes ----
 z.df %>%  filter(site=="Toolik") %>% 
