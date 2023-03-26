@@ -27,7 +27,7 @@ In github you can download a zip file of the project as shown below in the scree
 
 After it is downloaded you can open the **GGPlot-for-LimnoSeries.Rproj** file. Since this is a project it does not matter where this folder is as everything should run no matte where the folder is or what computer you are on.
 
-# 1) Examples of Themes, Multipanel Graphs and Plotly
+# 1) Examples of Themes, Multipanel Graphs and Plotly (ggplotly)
 
 Most of the code for themes, multipanel graphs, and plotly will be done with one file - **01_intro_graphing zoops_for_workshop.R**. Preparing the data for this file was done with 00_prep_of_original_data.R but we will not go into that but it is there if you are interested. In this file we will...
 
@@ -59,10 +59,6 @@ How do you do stacked or non stacked bar plots
 # 4) Tables and live documents
 
 Yes - rMarkdown is a way to do tables and live documents - a shrot intro to Kabble and KabbleExtra here but they only export to HTML and PDF documents right now.
-
-# 5) Heat maps
-
-Working on porting this over but this was done at GLEON in New York a few years back and the University of Miami - Oxford graduate students did this and I modified it a bit here or on my website. Working on this but am sure there will not be time but might be of interst.
 
 ### Citation for data
 

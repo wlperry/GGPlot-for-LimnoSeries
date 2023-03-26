@@ -27,7 +27,8 @@ library(skimr)
 
 # Data Munging ----- 
 ## read in the file -----
-z.df <- read_csv("data/zoops_toolik_1985.csv") 
+z.df <- read_csv("data/zoops_toolik_1985.csv")  %>% 
+  mutate(Date = mdy(Date)) %>% clean_names()
 
 # Challenge # 1 - how you you clean up the column names ----
 
@@ -374,4 +375,37 @@ toolik_reorder.plot <- z.df %>%
   theme_gleon() +
   facet_grid(site ~ .)
 toolik_reorder.plot
+
+# final - what if you want the axes to have differnet labels for the date
+toolik_reorder.plot <- z.df %>%
+  filter(site == "Toolik") %>%
+  ggplot(aes(date, number, color = species)) +
+  geom_point() +
+  geom_line() +
+  labs(x = "Date", y = "Count") +
+  scale_color_manual(
+    name = "Zooplankton Species",
+    values = c(
+      "darkgreen", "blue2", "red4", "purple3",
+      "orange3", "yellow4", "steelblue4", "goldenrod4"),
+    labels = c(
+      "Heterocope", "Holopedium", "Polyphemus", "Bosmina",
+      "C. scutt", "D. long", "D. midd", "D. pribb") ) +
+  theme_gleon() +
+  facet_grid(site ~ .) +
+  scale_x_date(date_breaks = "1 weeks", 
+               labels=date_format("%b-%d"))
+toolik_reorder.plot
+
+# # the key is ?strptime
+# %a Abbreviated weekday name 
+# %A Full weekday name 
+# %b Abbreviated month name 
+# %B Full month name 
+# %d Day of the month as decimal number (01–31).
+# %e Day of the month as decimal number (1–31), with a leading space for a single-digit number.
+# %j Day of year as decimal number (001–366)
+# %m Month as decimal number (01–12).
+# %y Year without century (00–99). 
+# %Y Year with century.
          

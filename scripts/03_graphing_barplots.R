@@ -28,10 +28,23 @@ library(skimr)
 # Data Munging ----- 
 ## read in the file -----
 z.df <- read_csv("data/zoops_toolik_1985.csv") %>% clean_names() %>% 
-  mutate(date = mdy(date))
+  mutate(date = mdy(date)) 
 
+# Lets do only July as it gets busy
+z.df <- z.df %>% 
+  mutate(month = month(date)) %>% 
+  filter(month == 7)
+
+# stacked bar
 z.df %>% filter(site =="Toolik") %>% 
   ggplot(aes(date, number, fill=species))+
   geom_bar(aes(fill = species), stat="identity")
+
+# bar side by side
+z.df %>% filter(site =="Toolik") %>% 
+  ggplot(aes(date, number, fill=species))+
+  geom_bar(aes(fill = species), stat="identity",
+           position = position_dodge(width=2.5))
+
   
            
