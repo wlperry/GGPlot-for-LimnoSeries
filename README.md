@@ -29,7 +29,7 @@ After it is downloaded you can open the **GGPlot-for-LimnoSeries.Rproj** file. S
 
 # 1) Examples of Themes, Multipanel Graphs and Plotly
 
-Most of the code for themes, multipanel graphs, and plotly will be done with one file - 01_intro_graphing zoops_for_workshop.R. Preparing the data for this file was done with 00_prep_of_original_data.R but we will not go into that but it is there if you are interested. In this file we will...
+Most of the code for themes, multipanel graphs, and plotly will be done with one file - **01_intro_graphing zoops_for_workshop.R**. Preparing the data for this file was done with 00_prep_of_original_data.R but we will not go into that but it is there if you are interested. In this file we will...
 
 -   import a file and fix the headers (janitor)
 -   make a simple graph
@@ -44,7 +44,7 @@ Most of the code for themes, multipanel graphs, and plotly will be done with one
 
 # 2) Depth Profile data
 
-So one of the main issues with GGplot is trying to produce graphs with data like dissolved oxygen or temperature on the X-axis on top and depth going down the Y-axis. GGplot does not like to play nice with that sort of ploting of data. We will cover how to do these sort of plots in two ways:
+So one of the main issues with GGplot is trying to produce graphs with data like dissolved oxygen or temperature on the X-axis on top and depth going down the Y-axis. We will use **02_Graphing_with_depth_for_workshop.R** to practice this. GGplot does not like to play nice with that sort of ploting of data. We will cover how to do these sort of plots in two ways:
 
 -   First using coord_flip of the graph - sort of a pain
 

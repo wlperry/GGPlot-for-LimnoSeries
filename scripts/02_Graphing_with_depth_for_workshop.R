@@ -65,7 +65,7 @@ temp.df %>%
 
 
 
-# Challenge #2 how do you revese the y axis? -----
+# Challenge #2 how do you reverse the y axis? -----
 temp.df %>% 
   filter(date == ymd("1990-07-03")) %>% 
   ggplot(aes(y=value, x=depth_m)) + 
