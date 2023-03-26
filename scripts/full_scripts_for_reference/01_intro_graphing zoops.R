@@ -183,7 +183,7 @@ zoop.plot
 ggplotly(zoop.plot)
 
 
-# How to customize what is is the hihglight box
+# How to customize what is is the highlight box
 # a lot of options but you can do 
 zoop.plot <- z.df %>% 
   ggplot(aes(date, number, color=species, text = paste('site:', site, sep=" "))) +
