@@ -27,8 +27,7 @@ library(skimr)
 
 # Data Munging ----- 
 ## read in the file -----
-z.df <- read_csv("data/zoops_toolik_1985.csv")  %>% 
-  mutate(Date = mdy(Date)) %>% clean_names()
+z.df <- read_csv("data/zoops_toolik_1985.csv")  
 
 # Challenge # 1 - how you you clean up the column names ----
 
