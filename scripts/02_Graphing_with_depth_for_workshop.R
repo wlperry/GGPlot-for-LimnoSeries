@@ -16,7 +16,7 @@
 # library(styler)
 
 # # Libraries used each time ---------
-# uesed each time
+# used each time
 library(tidyverse)
 library(scales)
 library(readxl)
@@ -39,7 +39,11 @@ temp.df <- t.df %>%
 
 # plot of temp with depth
 # so lets make a plot of 1990-07-03 for toolik lake of temp vs depth 
-
+temp.df %>% 
+  filter(date == ymd("1990-07-03")) %>% 
+  ggplot(aes(y=value, x=depth_m, variable="temp_c"))+
+  geom_point() +
+  geom_path() +coord_flip()
 
 
 
@@ -70,8 +74,10 @@ temp.df %>%
   filter(date == ymd("1990-07-03")) %>% 
   ggplot(aes(y=value, x=depth_m)) + 
   geom_point() + 
-  geom_line() +
-  coord_flip() 
+  geom_path() +
+  coord_flip() +
+  scale_x_reverse() +
+  scale_y_continuous(position="right")
 
 
 
@@ -102,7 +108,10 @@ temp.df %>%
 temp.df %>% 
   filter(date == ymd("1990-07-03")) %>% 
   ggplot(aes(x=value, y=depth_m)) + 
-  geom_point() 
+  geom_point() +
+  geom_path()+
+  scale_x_continuous(position="top") +
+  scale_y_reverse()
 
 
 

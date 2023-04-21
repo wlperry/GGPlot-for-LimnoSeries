@@ -27,7 +27,7 @@ library(skimr)
 
 # Data Munging ----- 
 ## read in the file -----
-z.df <- read_csv("data/zoops_toolik_1985.csv")  
+z.df <- read_csv("data/zoops_toolik_1985.csv")  %>% clean_names() %>% mutate(date = mdy(date))
 
 # Challenge # 1 - how you you clean up the column names ----
 
@@ -37,13 +37,17 @@ z.df <- read_csv("data/zoops_toolik_1985.csv")
 # Summary stats by lake-----
 # what does the data look like? 
  
-
+z.df %>% group_by(site, species) %>% skim()
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Simple zoop graph ----- 
 # only for the site Toolik and x = date, y = number and color as species
-
+z.df %>% filter(site=="Toolik") %>% 
+  ggplot(aes(x=date, y = number, color= species))+
+  geom_point()+
+  geom_line() +
+  theme_classic()
 
 
 
@@ -56,10 +60,21 @@ z.df <- read_csv("data/zoops_toolik_1985.csv")
 # ggThemeAssist - how to modify theme settings ------
 # what if we wanted a different look to the graph before we go further
 # *highlight code below* and click *addins* and *ggThemeAssistant*
-z.df %>% filter(site=="Toolik") %>% 
-  ggplot(aes(date, number, color=species)) +
+z.df %>%
+  filter(site == "Toolik") %>%
+  ggplot(aes(date, number, color = species)) +
   geom_point() +
-  geom_line() 
+  geom_line() +
+  theme(
+    axis.line = element_line(linetype = "solid"),
+    axis.ticks = element_line(
+      colour = "gray15",
+      linetype = "dotdash"
+    ), 
+    panel.grid.major = element_line(linetype = "blank"),
+    panel.grid.minor = element_line(linetype = "blank"),
+    panel.background = element_rect(fill = NA)
+  )
 
 
 
@@ -112,7 +127,7 @@ z.df %>%  filter(site=="Toolik") %>%
   ggplot(aes(date, number, color=species)) +
   geom_point() +
   geom_line() +
-  theme_classic() # change light to your name
+  theme_gleon() # change light to your name
 
 
 
@@ -125,7 +140,7 @@ z.df %>%  filter(site=="Toolik") %>%
 saved_theme <- theme(
   # https://ggplot2.tidyverse.org/reference/theme.html
   # font stuff
-  text = element_text(family = "Times New Roman"),
+  # text = element_text(family = "Times New Roman"),
   # plot stuff
   plot.title = element_text(size = 18, face = "bold"), 
   panel.background = element_rect(fill = NA, linetype = "solid"), 
@@ -135,8 +150,8 @@ saved_theme <- theme(
   # Axis Stuff
   axis.line = element_line(linetype = "solid", colour = "black"),
   axis.ticks = element_line(colour = "black"),
-  axis.title = element_text(size = 20, face = "bold"), 
-  axis.text = element_text(size = 17, face = "bold", colour = "black"),
+  axis.title = element_text(size = 12, face = "bold"), 
+  axis.text = element_text(size = 13, face = "bold", colour = "black"),
   axis.text.x = element_text(size = 14, colour = "black"), 
   axis.text.y = element_text(size = 16, colour = "black"), 
   # Legend stuff
@@ -158,7 +173,8 @@ theme_gleon2 <- readRDS('themes/saved_theme.rds')
 z.df %>%  filter(site=="Toolik") %>% 
   ggplot(aes(date, number, color=species)) +
   geom_point() +
-  geom_line() 
+  geom_line() +
+  theme_gleon2
 
 
 
@@ -175,10 +191,13 @@ zoop.plot <- z.df %>%
   ggplot(aes(date, number, color=species)) +
   geom_point() +
   geom_line() +
-  theme_gleon()
+  theme_gleon() +
+  facet_grid(site~.)
 
 
 zoop.plot
+
+ggplotly(zoop.plot)
 
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -210,7 +229,7 @@ zoop.plot
 # How to customize what is is the hihglight box
 # a lot of options but you can do 
 zoop.plot <- z.df %>% 
-  ggplot(aes(date, number, color=species, text = paste('site:', site, sep=" "))) +
+  ggplot(aes(date, number, color=species, text = paste('site:', site, sep="-->"))) +
   geom_point() +
   geom_line() +
   theme_gleon() +
@@ -237,14 +256,13 @@ n2f.plot <- z.df %>%
   geom_point() +
   geom_line() +
   labs(x="Date", y= "Count") +
-  theme_gleon() +
   scale_color_manual(
     name="Zooplankton Species",
     values = c("darkgreen", "blue2", "red4", "purple3", 
-                "orange3", "yellow4", "steelblue4", "goldenrod4"),
+               "orange3", "yellow4", "steelblue4", "goldenrod4"),
     labels = c("bosmina", "c_scutt", "d_long", "d_midd", 
                "d_prib", "heter", "holo", "p_ped")) +
-  theme_gleon() 
+  saved_theme
 n2f.plot
 
 # Graph of N2 Ref  -----
@@ -260,7 +278,7 @@ n2r.plot <- z.df %>%
                "orange3", "yellow4", "steelblue4", "goldenrod4"),
     labels = c("bosmina", "c_scutt", "d_long", "d_midd", 
                "d_prib", "heter", "holo", "p_ped")) +
-  theme_gleon() 
+  saved_theme
 n2r.plot
 
 # Graph of Toolik ------
@@ -282,8 +300,11 @@ toolik.plot
 
 # USING PATCHWORK TO MAKE THE MULTIPANEL GRAPH - YOU CAN ALSO USE GRID EXTERA
 # Making multipanel graph ----
-
-
+final.plot <- n2f.plot +theme(axis.title = element_blank(), axis.text.x =element_blank()) +
+  n2r.plot + 
+  plot_layout(ncol=1, guides = "collect") +
+  plot_annotation(tag_levels = "A", tag_suffix = "]") 
+final.plot
 
 
 
@@ -296,7 +317,7 @@ toolik.plot
 
 
 # Save the final plot------
-ggsave(final.plot, file ="figures/final_zoop_plot.pdf",
+ggsave(final.plot, file ="figures/final_zoop_plot2.pdf",
        units = "in",
        width = 8, height = 8)
 
@@ -329,11 +350,14 @@ ggsave(final.plot, file ="figures/final_zoop_plot.pdf",
 # Further Customization #2------
 # Using Factors to reorder the series ----
 
+z.df <- z.df %>% 
+  mutate(species = as_factor(species))
 
+levels(z.df$species)
 
-
-
-
+z.df <- z.df %>% 
+  mutate(species = fct_relevel(species,
+                               "heter",   "holo",    "p_ped",  "bosmina", "c_scutt", "d_long",  "d_midd",  "d_prib"           ))
 
 # see levels of factors -----
 levels(z.df$species)
@@ -385,15 +409,24 @@ toolik_reorder.plot <- z.df %>%
     name = "Zooplankton Species",
     values = c(
       "darkgreen", "blue2", "red4", "purple3",
-      "orange3", "yellow4", "steelblue4", "goldenrod4"),
-    labels = c(
-      "Heterocope", "Holopedium", "Polyphemus", "Bosmina",
-      "C. scutt", "D. long", "D. midd", "D. pribb") ) +
+      "orange3", "yellow4", "steelblue4", "goldenrod4")
+    
+    # labels = c(
+    #   "Heterocope", "Holopedium", "Polyphemus", "Bosmina",
+    #   "C. scutt", "D. long", "D. midd", "D. pribb") 
+    ) +
   theme_gleon() +
   facet_grid(site ~ .) +
-  scale_x_date(date_breaks = "1 weeks", 
-               labels=date_format("%b-%d"))
+  scale_x_date(date_breaks = "1 week", 
+               labels=date_format("%b-%d-%y"))
 toolik_reorder.plot
+
+z.df <- z.df %>% 
+  mutate(full_species = case_when(
+    species == "heter" ~ "Heterocope",
+    species == "holo" ~ "Holsoimething",
+    TRUE~"other"
+  ))
 
 # # the key is ?strptime
 # %a Abbreviated weekday name 
